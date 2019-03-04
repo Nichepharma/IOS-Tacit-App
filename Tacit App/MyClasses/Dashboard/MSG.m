@@ -16,11 +16,7 @@ static MSG * instance = nil;
     @synchronized(self)
     {
         if(instance==nil)
-        {
-    
-            instance= [MSG new];
-            
-        }
+        {instance= [MSG new]; }
       
     }
     return instance;

@@ -12,14 +12,15 @@
 @interface NotificationViewController(){
 @private   Activity_indicator_loading  *notification_Loader ;;
     
-}@end
+} @end
 
 @implementation NotificationViewController
 
 
-
-
 -(void)viewDidLoad{
+    NSLog(@"__NotificationViewController");
+
+    
     Image *bkg_Enter = [[Image  alloc] initWithFrame:@"dash_general_bkg.png" :0 :0];
     [self.view addSubview:bkg_Enter];
     Image *img_enter_Title = [[Image alloc] initWithFrame:@"dash_welcome.png" :450 :25];
@@ -27,9 +28,9 @@
     
    
     
-//      [[DBManager getSharedInstance]insertNotification:@"" message:@"Tws" sender:@"0" noti_Daye:@"Date"];
+    //[[DBManager getSharedInstance]insertNotification:@"" message:@"Tws" sender:@"0" noti_Daye:@"Date"];
     
-//    NSLog(@">>> NotiData %@ ",[[DBManager getSharedInstance] getNotifications]);
+    //NSLog(@">>> NotiData %@ ",[[DBManager getSharedInstance] getNotifications]);
   
     Button *btnReload = [[Button alloc] initWithFrame:@"dash_btn_save1.png" :100 :40];
     [btnReload addTarget:self action:@selector(notification_ReloadTableView:) forControlEvents:UIControlEventTouchUpInside];
@@ -47,15 +48,14 @@
     
     [self.view addSubview:self.tv_notifcationData];
 
-    
+/*
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(showReceivedMessage:)
                                                  name:appDelegate.messageKey
                                                object:nil];
-
-    
+*/
 }
 
 
@@ -63,16 +63,12 @@
     notification_Loader = [[Activity_indicator_loading alloc] init];
     [NSTimer scheduledTimerWithTimeInterval:1  target:self selector:@selector(notification_ReloadTableView:) userInfo:nil repeats:NO];
     [self.view addSubview:notification_Loader];
-   
-    
 }
 
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
-
 
 
 #pragma mark -TableView API
@@ -85,18 +81,20 @@
 
 -(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    //    if (!cell) cell= [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-    if (!cell)  cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     
-    else
-    {
+    //if (!cell) cell= [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+        //couldn't dequeue it, then initialize one
+    }
+    else {
         //To remove the subview of cell.
         for (UIView *vwSubviews in [cell.contentView subviews])
         {
             [vwSubviews removeFromSuperview];
         }
-        
     }
+    
     if (indexPath.row %2 != 0 ) {
         cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"dash_blue_heder.png"]];
     }else{
@@ -105,7 +103,6 @@
     
     cell.textLabel.text = [[[[DBManager getSharedInstance] getNotifications] objectForKey:@"noti_string"] objectAtIndex:indexPath.row];
     return cell;
-    
 }
 
 -(IBAction)notification_ReloadTableView:(id)sender{
@@ -113,8 +110,5 @@
     [notification_Loader removeFromSuperview];
     [self dismissViewControllerAnimated:YES completion: nil];
 }
-
-
-
 
 @end

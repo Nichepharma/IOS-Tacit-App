@@ -6,9 +6,8 @@
 //
 #import <UIKit/UIKit.h>
 #import "Header.h"
-#import "SoapRequest.h"
 
-@interface LoginViewController : UIViewController<SoapRequestDelegate, UITextFieldDelegate>
+@interface LoginViewController : UIViewController<UITextFieldDelegate>
 {
 
 }

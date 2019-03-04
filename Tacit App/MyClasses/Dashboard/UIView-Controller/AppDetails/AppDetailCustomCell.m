@@ -17,18 +17,27 @@ int numberOfDownload = 0 ;
 
 - (IBAction)makeUpdate:(id)sender {
 
+    if (numberOfDownload > 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Info"
+                                                        message:@"please wait Product finishing the Download"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Done"
+                                              otherButtonTitles:nil , nil];
+        [alert show];
+    }else{
     [sender setHidden:true];
     [_app_details_indecator_load startAnimating] ;
 
-    int index = [sender tag];
+    int index = (int)[sender tag];
     NSMutableDictionary * dictionaryOf_userApplications  = [[NSMutableDictionary alloc]initWithDictionary:[Read_WriteJSONFile readJsonFileWithName:@"AppsForUser"]];
-    NSString *app_name    = [[[dictionaryOf_userApplications objectForKey:@"apps"] objectAtIndex:index] objectForKey:@"name"];
+    NSString *app_name    = [[NSString alloc] initWithFormat:@"%@",[[[dictionaryOf_userApplications objectForKey:@"product"] objectAtIndex:index] objectForKey:@"pName"]];
+    [Download_Remove_Content removeApplication: app_name];
 
     Download_Remove_Content  *downContent = [[Download_Remove_Content alloc] init];
     downContent.downloadDelegate = self ;
     [downContent _StartDownloadFromServer:app_name];
 
-
+    }
 }
 
 
@@ -49,7 +58,6 @@ int numberOfDownload = 0 ;
 }
 
 -(void)didFinshDownloadContanetWithError{
-[AlertController showAlertWithSingleButton:@"Cancel" presentOnViewController:self alertTitle:@"Info" alertMessage:@"Error to Download Files ... "];
     [[self delegate] finshWithError];
 }
 

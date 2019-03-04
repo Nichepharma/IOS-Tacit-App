@@ -7,13 +7,13 @@
 //
 
 #import "Header.h"
-#import "SendSyncSession.h"
 
 
-@interface SyncViewController : UIViewController<UITableViewDelegate ,UITableViewDataSource ,sendSyncDelegate , UIGestureRecognizerDelegate>
+
+@interface SyncViewController : UIViewController<UITableViewDelegate ,UITableViewDataSource , UIGestureRecognizerDelegate>
 
 @property (strong , nonatomic)NSMutableDictionary *sessionDetails ;
 
 @property ( nonatomic) BOOL isComeFromHomeViewController ;
--(void)stopLoad ;
+
 @end

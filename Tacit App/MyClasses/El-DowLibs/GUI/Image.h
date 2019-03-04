@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "UIImageView+ImageViewCategory.h"
 @interface Image : UIImageView
 
 - (id)initWithFrame :(NSString*) imageName :(NSInteger)imageX :(NSInteger)imageY;

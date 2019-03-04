@@ -7,7 +7,7 @@
 //
 
 #import "Download_Remove_Content.h"
-
+#import "DBManager.h"
 #define SERVER_LINK_DONLOAD @"http://www.tacitapp.com/Yahia/tacitapp/"
 
 @implementation Download_Remove_Content
@@ -19,9 +19,11 @@
     dispatch_async(q, ^{
         //Path info
         NSLog(@"Starting Download...... %@",fileName) ;
-   
+        NSUserDefaults *userDefault =  [[NSUserDefaults alloc] init];
+        NSString *company_name = [[userDefault objectForKey:@"companyName"] lowercaseString];
+
         [self.downloadDelegate didStartDownloadContanet];
-        NSString *stringURL = [NSString stringWithFormat:@"%@%@.zip",SERVER_LINK_DONLOAD,fileName];
+        NSString *stringURL = [NSString stringWithFormat:@"%@%@/%@.zip",SERVER_LINK_DONLOAD,company_name,fileName];
         NSLog(@"Starting Download...... %@",stringURL) ;
         NSURL *url = [NSURL URLWithString:stringURL];
         NSData *data = [NSData  dataWithContentsOfURL:url];
@@ -36,31 +38,19 @@
             [SSZipArchive unzipFileAtPath:filePath toDestination:dataPath delegate:self];
              NSLog(@"Finish ....... %@",[fileName substringToIndex:fileName.length - 4]);
 
-
-                [[self downloadDelegate] didFinshDownloadContanet:[fileName substringToIndex:fileName.length - 4]] ;
-
-
+            [[self downloadDelegate] didFinshDownloadContanet:[fileName substringToIndex:fileName.length - 4]] ;
             if (![Download_Remove_Content checkExistFileWithFileName:[fileName substringToIndex:fileName.length - 4]]) {
                 [self.downloadDelegate didFinshDownloadContanetWithError];
             }
-                   });
-});
-    
-
+        });
+    });
 }
-
-
-
-
-
 
 -(void)zipArchiveDidUnzipArchiveAtPath:(NSString *)path zipInfo:(unz_global_info)zipInfo unzippedPath:(NSString *)unzippedPath{
 
     //didFinshDownloadContanet
     [self.downloadDelegate didFinshDownloadContanet];
 }
-
-
 
 
 +(BOOL)removeApplication:(NSString *)str_ApplicationNameWillRemove{

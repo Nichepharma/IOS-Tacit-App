@@ -26,9 +26,14 @@
 
 -(UIImageView *)setBarAnimations ;
 -(UIImageView *)setBarAnimationsWithDelay : (float) _Delay ;
+-(UIImageView*)setWidthBarAnimations: (float) _Delay ;
 
 -(UIImageView *)setFadeAnimations ;
 -(UIImageView *)setFadeAnimationsWithDelay : (float) _Delay ;
+-(UIImageView *)setFadeOutAnimations;
+-(UIImageView *)setFadeOutAnimations : (float) _Delay;
+
+
 
 -(UIImageView *)setAnimation_MoveFromCurrent_Y_to_Y_Postion :(float) _YPostion ;
 -(UIImageView *)setAnimation_MoveFromCurrent_Y_to_Y_Postion :(float) _YPostion withDelay:(float)_Delay ;
@@ -39,7 +44,14 @@
 
 -(UIImageView *)setAnimationWithFrameWithFrame :(CGRect) frame1  to_NEW_Frame  :(CGRect) frame2 withDelay:(float)_Delay ;
 
-
-
 -(UIImageView *)changeImageWithAnimationsToNewImage : (UIImage *)newImg withDelay:(float)_Delay  ;
+-(UIImageView *)changeImageWithAnimationsToNewImageWithoutFade : (UIImage *)newImg withDelay:(float)_Delay ;
+
+
+-(UIImageView *)imageWithLeftFlipWithDelay:(float)_Delay ;
+-(UIImageView *)imageWithRightFlipWithDelay:(float)_Delay;
+-(UIImageView *)imageWithUpFlipWithDelay:(float)_Delay;
+-(UIImageView *)imageWithDownFlipWithDelay:(float)_Delay;
+
+
 @end

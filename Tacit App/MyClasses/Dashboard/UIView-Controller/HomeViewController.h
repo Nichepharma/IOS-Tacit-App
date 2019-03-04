@@ -9,10 +9,11 @@
 #import "Header.h"
 
 
-@interface HomeViewController : UIViewController<SoapRequestDelegate>
+@interface HomeViewController : UIViewController
 
 
 @property NSString *MsgString;
+
 //
 //@property(nonatomic, strong) MSG * Message;
 

@@ -19,12 +19,14 @@ NSString *_viewSession_str_du ,*_viewSession_str_sessionID;
 int _viewSession_y =0;
 
 const int __Sesstion_BigView_X = 550 ;
+NSString *str_tabelHeader ;
+
 - (id)initWithFrame:(CGRect)frame :(double)num_SesstionBigView_Y {
     self = [super initWithFrame:frame];
+    NSLog(@"__viewSessionDetails");
+
     
     if (self) {
-      
-        
         
         self.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:.5];
         
@@ -38,15 +40,13 @@ const int __Sesstion_BigView_X = 550 ;
         Image *__viewSession_arrow = [[Image alloc ] initWithFrame:@"dash_session_2.png" :-65 :30];
         [__Sesstion_BigView addSubview:__viewSession_arrow];
         
-        
-        
-        
+
         Image *_viewSession = [[Image alloc] initWithFrame:@"dash_session_1.png" :0 :0];
         _viewSession.frame = CGRectMake(0, 0, 240, _viewSession.frame.size.height);
         [__Sesstion_BigView addSubview:_viewSession];
       
         Button *btn_SessionSamaryClose =[UIButton buttonWithType:UIButtonTypeContactAdd];
-         btn_SessionSamaryClose.frame=CGRectMake(200, 5, 30, 30);
+            btn_SessionSamaryClose.frame=CGRectMake(200, 5, 30, 30);
         [btn_SessionSamaryClose addTarget:self action:@selector(_sesstion_samaryClosed:) forControlEvents:UIControlEventTouchUpInside] ;
         [btn_SessionSamaryClose.layer setBorderColor:[[UIColor whiteColor] CGColor]];
          btn_SessionSamaryClose.transform=CGAffineTransformMakeRotation(2.4);
@@ -61,17 +61,15 @@ const int __Sesstion_BigView_X = 550 ;
         _viewSession_str_sessionID =[[[ReturnSesstionDetails sharedInstance] getData] objectForKey:@"id"] ;
         _viewSession_str_du =[[[ReturnSesstionDetails sharedInstance] getData] objectForKey:@"du"] ;
         
-        
+        str_tabelHeader = [[[ReturnSesstionDetails sharedInstance] getData] objectForKey:@"visit_type"];
         
         Label *__lblSession = [[Label alloc] initWithFrame:CGRectMake(0,   _viewSession.frame.size.height+ _viewSession.frame.origin.y +10, __Sesstion_BigView.frame.size.width , 50) : [NSString stringWithFormat:@"  Session:\n  %@",_viewSession_str_sessionID ]:14];
         __lblSession.textColor = [UIColor whiteColor];
         __lblSession.backgroundColor = [self colorWithHexString:@"979797"];
         [__Sesstion_BigView addSubview:__lblSession];
+
         
-        
-        
-        
-            tv_detailData = [[UITableView alloc] initWithFrame:CGRectMake(0, __lblSession.frame.size.height+ __lblSession.frame.origin.y +10
+    tv_detailData = [[UITableView alloc] initWithFrame:CGRectMake(0, __lblSession.frame.size.height+ __lblSession.frame.origin.y +10
                                                                                 , __Sesstion_BigView.frame.size.width, 113 )];
                 tv_detailData.delegate=self;
                 tv_detailData.dataSource=self;
@@ -99,21 +97,20 @@ const int __Sesstion_BigView_X = 550 ;
 
         
         
-//        Label *__lblSession_DoctorSpecTitle = [[Label alloc] initWithFrame:CGRectMake(20,   tv_detailData.frame.size.height+ tv_detailData.frame.origin.y +10, self.frame.size.width - 20, 20) : [NSString stringWithFormat:@"Spec:"]:14];
-//        __lblSession_DoctorSpecTitle.textColor = [UIColor whiteColor];
-//        [self addSubview:__lblSession_DoctorSpecTitle];
-//        
-//        
-//        tv_detailData2 = [[UITableView alloc] initWithFrame:CGRectMake(20, __lblSession_DoctorSpecTitle.frame.size.height+ __lblSession_DoctorSpecTitle.frame.origin.y
-//                                                                      , self.frame.size.width-30, 100 )];
-//        tv_detailData2.delegate=self;
-//        tv_detailData2.dataSource=self;
-//        tv_detailData2.backgroundColor=[UIColor clearColor];
-//        tv_detailData2.superview.backgroundColor = [UIColor clearColor];
-//        tv_detailData2.userInteractionEnabled = YES;
-//        //tv_detailData2.backgroundColor=[UIColor yellowColor];
-//        tv_detailData2.separatorColor=[UIColor clearColor];
-//        [self addSubview:tv_detailData2];
+        //Label *__lblSession_DoctorSpecTitle = [[Label alloc] initWithFrame:CGRectMake(20,   tv_detailData.frame.size.height+ tv_detailData.frame.origin.y +10, self.frame.size.width - 20, 20) : [NSString stringWithFormat:@"Spec:"]:14];
+        //__lblSession_DoctorSpecTitle.textColor = [UIColor whiteColor];
+        //[self addSubview:__lblSession_DoctorSpecTitle];
+        
+        //        tv_detailData2 = [[UITableView alloc] initWithFrame:CGRectMake(20, __lblSession_DoctorSpecTitle.frame.size.height+ __lblSession_DoctorSpecTitle.frame.origin.y
+        //                                                                      , self.frame.size.width-30, 100 )];
+        //tv_detailData2.delegate=self;
+        //tv_detailData2.dataSource=self;
+        //tv_detailData2.backgroundColor=[UIColor clearColor];
+        //tv_detailData2.superview.backgroundColor = [UIColor clearColor];
+        //tv_detailData2.userInteractionEnabled = YES;
+        ////tv_detailData2.backgroundColor=[UIColor yellowColor];
+        //tv_detailData2.separatorColor=[UIColor clearColor];
+        //[self addSubview:tv_detailData2];
         
         
         
@@ -124,11 +121,15 @@ const int __Sesstion_BigView_X = 550 ;
 }
 
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{   return @"Doctors"; }
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    return str_tabelHeader ;
+    
+}
 
-
-
--(int) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {  return [_viewSession_arr_docName count]; }
+//TableView
+-(int) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [_viewSession_arr_docName count];
+}
 
 -(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -143,9 +144,8 @@ const int __Sesstion_BigView_X = 550 ;
     cell.backgroundColor = [UIColor clearColor];
     
     return cell;
-    
-    
 }
+
 -(UIColor*)colorWithHexString:(NSString*)hex {
     NSString *cString = [[hex stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
     
@@ -181,16 +181,14 @@ const int __Sesstion_BigView_X = 550 ;
                            alpha:1.0f];
 }
 
-
-
-
 -(IBAction) _sesstion_samaryClosed:(id)sender{
     [self removeFromSuperview];
 }
+
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
    // CGPoint location = [recognizer locationInView:[recognizer.view superview]];
     
-        [self removeFromSuperview];
+    [self removeFromSuperview];
 }
 
 @end

@@ -1,0 +1,35 @@
+App Identifier:
+For The App Store: com.nichepharma.TacitApp
+For FileZila Uploading: com.nichepharma.Tacit-App
+
+########################################################################################################################
+
+class CreateViewWithArray is an UIView which u will give an a JSON and he will parse that json and see what he will do (Images, Animations, Actions and so on)
+
+JSON Examples:
+{
+    animationType = setFrameWithPostion;
+    delay = "1.5";
+    name = "img/S1/S1-04.png";
+    x1 = "-200";
+    x2 = 95;
+    y1 = 480;
+    y2 = 480;
+}, {
+    animationType = setFadeAnimations;
+    delay = "0.5";
+    name = "img/S3/S3-03.png";
+    positionX = setXCenter;
+    positionY = 190;
+},
+
+########################################################################################################################
+
+ViewControllers:
+LoginViewController for login
+HomeViewController  the one that he get to choose which to open and download like dashboard or something
+ContanerAppView     is the one where you display the slides
+ClosingViewController is a Viewcontroller which display the last slide you have
+BeforeDoctorView    viewcontroller where u choose if its [Private Market, another thing, another thing]
+
+########################################################################################################################

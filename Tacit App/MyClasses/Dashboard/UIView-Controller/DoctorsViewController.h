@@ -8,11 +8,12 @@
 
 
 #import "Header.h"
+#import "BeforeDoctorView.h"
+@interface DoctorsViewController : UIViewController<UITableViewDelegate ,UITableViewDataSource,UISearchBarDelegate,UISearchDisplayDelegate , _BeforeDocView >
 
-@interface DoctorsViewController : UIViewController<UITableViewDelegate ,UITableViewDataSource,UISearchBarDelegate,UISearchDisplayDelegate>
-
-
+@property NSInteger visit_Type ;
 @property double doc_totalTime;
 @property NSString  *doc_ACC;
 @property NSString *str_SesstionID;
+@property BOOL reUpdateSession ;
 @end

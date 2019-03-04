@@ -22,7 +22,6 @@
 @interface AppDetailCustomCell : UITableViewCell <_DownloadContentDelegate>
 
 @property (strong,nonatomic) id<AppDetailsDelegate> delegate;
-
 @property (weak, nonatomic) IBOutlet UIImageView *app_details_img_icon;
 @property (weak, nonatomic) IBOutlet UILabel *app_details_lbl_name;
 @property (weak, nonatomic) IBOutlet UILabel *app_details_lbl_currentVersion;

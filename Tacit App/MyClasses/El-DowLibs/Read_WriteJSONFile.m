@@ -17,7 +17,9 @@
     NSURL * url_name = [NSURL URLWithString:json_url];
     NSData * data_name = [NSData dataWithContentsOfURL:url_name];
     NSError * error_name;
-    jsonData = [NSJSONSerialization JSONObjectWithData:data_name options:kNilOptions error:&error_name];
+    if (data_name){
+        jsonData = [NSJSONSerialization JSONObjectWithData:data_name options:kNilOptions error:&error_name];
+    }
     return jsonData ;
 }
 
@@ -70,13 +72,11 @@
     
     // NSLog(@"Array = %@",arr_contenerData);
     return arr_contenerData;
-    
-    
 }
 
 
 +(void)writeStringWithData:(NSString*)_Value  fileName :(NSString *)str_JsonFileName {
-
+    
     // Build the path, and create if needed.
     NSString* filePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString* fileAtPath = [filePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.json",str_JsonFileName]];

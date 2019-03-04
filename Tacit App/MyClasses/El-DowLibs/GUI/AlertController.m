@@ -13,10 +13,10 @@
 +(void)showAlertWithSingleButton :(NSString *)buttonTitle  presentOnViewController:(id)representOnView
                       alertTitle :(NSString *)str_Title alertMessage :(NSString*)str_message  {
     
-    NSLog(@">>> %f",[representOnView view].frame.size.height);
-    
-    
-    UIAlertController *alertController = [UIAlertController
+    if (representOnView) {
+        NSLog(@">>> %f",[representOnView view].frame.size.height);
+
+        UIAlertController *alertController = [UIAlertController
                                           alertControllerWithTitle:NSLocalizedString(str_Title, nil)
                                           message:NSLocalizedString(str_message, nil)
                                           preferredStyle:UIAlertControllerStyleActionSheet | UIAlertControllerStyleAlert];
@@ -30,16 +30,16 @@
 //                                   {
 //                                       NSLog(@"Cancel action");
 //                                   }];
-//    
-    UIAlertAction *okAction = [UIAlertAction
+
+        UIAlertAction *okAction = [UIAlertAction
                                actionWithTitle:NSLocalizedString(buttonTitle, buttonTitle)
                                style:UIAlertActionStyleDefault
                                handler:nil];
     
-    [alertController addAction:okAction];
+        [alertController addAction:okAction];
     
-  [representOnView presentViewController:alertController animated:YES completion:nil];
-    
+        [representOnView presentViewController:alertController animated:YES completion:nil];
+     }
     
 }
 

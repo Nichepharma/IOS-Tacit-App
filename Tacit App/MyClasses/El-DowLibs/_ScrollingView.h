@@ -20,11 +20,11 @@
 
 - (id)initWithFrame:(CGRect)frame numberOFSlides : (char ) scViewNumber ;
 
--(void)setScrollViewBKG :(NSArray *)arr_BKG appName :(NSString *)appName  ;
+//-(void)setScrollViewBKG :(NSArray *)arr_BKG appName :(NSString *)appName  ;
 
 @property (nonatomic, strong) UIView *sCrolling_CurrentView ;
 
-
+-(void)handelScrollViewBackgroundImage ;
 
 
 

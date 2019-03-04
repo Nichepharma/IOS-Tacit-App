@@ -11,7 +11,7 @@
 #import "Activity_indicator_loading.h"
 #import "ApplicationData.h"
 #import "internetChecked.h"
-
+#import "HomeViewController.h"
 #define CUSTOM_CELL "appDetailCustomCell"
 
 @implementation AppDetailsController
@@ -20,20 +20,20 @@ NSMutableDictionary * dictionaryOf_userApplications;
 NSDictionary *appDetailsOnServer ;
 
 
-
 -(void)viewDidLoad{
     [super viewDidLoad];
     internetChecked *internet =[[internetChecked alloc] init];
-
+ dispatch_async(dispatch_get_main_queue(), ^{
     if (internet.Checked) {
 
-    appDetailsOnServer = [Read_WriteJSONFile readJsonfromServer:@"http://www.tacitapp.com/Yahia/tacitapp/appVersion.txt"];
+        appDetailsOnServer = [GetDataFromServer serverApps_InfoArray];
     dictionaryOf_userApplications = [[NSMutableDictionary alloc]initWithDictionary:[Read_WriteJSONFile readJsonFileWithName:@"AppsForUser"]];
 
-    NSLog(@"appDetailsOnServer %@ ",dictionaryOf_userApplications);
+  //  NSLog(@"appDetailsOnServer %@ ",appDetailsOnServer);
     [self appDetail_TV].backgroundColor = [UIColor clearColor];
 
     [[self appDetail_TV] setBounces:false] ;
+    [self.appDetail_TV reloadData];
     }else{
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Info"
                                                         message:@"Sorry no internet connection"
@@ -44,6 +44,7 @@ NSDictionary *appDetailsOnServer ;
 
 
     }
+});
 
 }
 
@@ -52,31 +53,45 @@ NSDictionary *appDetailsOnServer ;
 }
 
 - (IBAction)dismissAppDetails:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+
+    if (isDownload) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Info"
+                                                        message:@"please wait Product finishing the Download"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Done"
+                                              otherButtonTitles:nil , nil];
+        [alert show];
+    }else{
+        HomeViewController *homeVC = [self.storyboard instantiateViewControllerWithIdentifier:@"enter"];
+        [self presentViewController:homeVC animated:YES completion:nil];
+    }
+
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     //The Row Numbers
-    return [[dictionaryOf_userApplications objectForKey:@"apps"] count] ;
+    return [[dictionaryOf_userApplications objectForKey:@"product"] count] ;
 }
 -(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     AppDetailCustomCell *customCell = [tableView dequeueReusableCellWithIdentifier:@CUSTOM_CELL];
     customCell.delegate = self ;
     [customCell setBackgroundColor:[UIColor clearColor]];
 
-    NSString *app_name    = [[[dictionaryOf_userApplications objectForKey:@"apps"] objectAtIndex:indexPath.row] objectForKey:@"name"];
-    NSString *app_version = [[[dictionaryOf_userApplications objectForKey:@"apps"]  objectAtIndex:indexPath.row]objectForKey:@"version"];
-    NSString *app_versionOnServer =  [appDetailsOnServer objectForKey:[app_name localizedCapitalizedString]] ;
+    NSString *app_name    = [[[[dictionaryOf_userApplications objectForKey:@"product"] objectAtIndex:indexPath.row] objectForKey:@"pName"] capitalizedString];
+    NSString *app_version = [NSString stringWithFormat:@"%@",[[[dictionaryOf_userApplications objectForKey:@"product"]  objectAtIndex:indexPath.row]objectForKey:@"version"]];
+    NSString *app_versionOnServer =  [[NSString stringWithFormat:@"%@",[appDetailsOnServer objectForKey:[app_name localizedCapitalizedString]]] capitalizedString] ;
 
     [[customCell app_details_lbl_name]setText:app_name];
-    [customCell app_details_lbl_currentVersion].text  = [self applicationIsDownloaded:app_name] == true ? app_version : @"-" ;
+    [customCell  app_details_lbl_currentVersion].text  = [self applicationIsDownloaded:app_name] == true ? app_version : @"-" ;
     [[customCell app_details_lbl_versionOnServer]setText:app_versionOnServer];
     [[customCell app_details_btn_download]setEnabled:false];
-    [[customCell  app_details_indecator_load] stopAnimating];
+    [[customCell app_details_indecator_load] stopAnimating];
+    [[customCell app_details_btn_download]setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
 
     if ([app_version doubleValue] < [app_versionOnServer doubleValue]  || ![self applicationIsDownloaded:app_name]) {
          [[customCell app_details_btn_download]setEnabled:true];
          [[customCell app_details_btn_download] setTag:indexPath.row];
+         [[customCell app_details_btn_download]setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     }
 
     return customCell;
@@ -85,10 +100,11 @@ NSDictionary *appDetailsOnServer ;
 
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    AppDetailCustomCell *customCell = [tableView dequeueReusableCellWithIdentifier:@CUSTOM_CELL];
 
     UIAlertController *deleteApp_alertController = [UIAlertController
                                                     alertControllerWithTitle:NSLocalizedString(@"Message", nil)
-                                                    message:NSLocalizedString(@"Are you sure you want to Re-login again ? \r  NB : 'All unsynchronized calls will be deleted.'", nil)
+                                                    message:NSLocalizedString(@"please Wait, the application still download ", nil)
                                                     preferredStyle:UIAlertControllerStyleActionSheet | UIAlertControllerStyleAlert] ;
 
     UIAlertAction *delete_Action = [UIAlertAction
@@ -96,12 +112,13 @@ NSDictionary *appDetailsOnServer ;
                                     style:UIAlertActionStyleDestructive
                                     handler:^(UIAlertAction *action)
                                     {
-                                        NSString *appName =[NSString stringWithFormat:@"%@" , [[[dictionaryOf_userApplications objectForKey:@"apps"] objectAtIndex:indexPath.row] objectForKey:@"name"]] ;
+                                        NSString *appName =[NSString stringWithFormat:@"%@" , [[[dictionaryOf_userApplications objectForKey:@"product"] objectAtIndex:indexPath.row] objectForKey:@"pName"]] ;
 
 
                                         [Download_Remove_Content removeApplication: appName];
 
-
+                                        [customCell reloadInputViews];
+                                        [customCell.contentView reloadInputViews];
                                         [[self appDetail_TV] reloadData];
 
                                     }];
@@ -131,37 +148,57 @@ NSDictionary *appDetailsOnServer ;
     return  [Download_Remove_Content checkExistFileWithFileName:app_name];
 }
 
--(void)didStartUpdate{}
+
+bool isDownload = false ;
+-(void)didStartUpdate{
+    isDownload = true ;
+}
+
+
+
 
 -(void)didFinshUpdate:(NSString *)app_name{
 
-    for (int i = 0 ; i < [[dictionaryOf_userApplications objectForKey:@"apps"] count] ; i++) {
-       NSString *temp_appName =  [[[dictionaryOf_userApplications  objectForKey:@"apps"] objectAtIndex:i]objectForKey:@"name"];
+    for (int i = 0 ; i < [[dictionaryOf_userApplications objectForKey:@"product"] count] ; i++) {
+       NSString *temp_appName =  [[[dictionaryOf_userApplications  objectForKey:@"product"] objectAtIndex:i]objectForKey:@"pName"];
+       NSString *temp_appID =  [[[dictionaryOf_userApplications  objectForKey:@"product"] objectAtIndex:i]objectForKey:@"pid"];
 
         if ([[temp_appName lowercaseString] isEqualToString:[app_name lowercaseString]]) {
 
-            NSDictionary *arr_newData =  @{ @"name"    : app_name ,
-                                            @"appID"   : [[[dictionaryOf_userApplications  objectForKey:@"apps"] objectAtIndex:i]objectForKey:@"appID"],
-                                            @"version" : [appDetailsOnServer objectForKey:[app_name localizedCapitalizedString]] ,
+            if (![appDetailsOnServer objectForKey:[app_name localizedCapitalizedString]] ) {
+                isDownload = false ;
+                [[self appDetail_TV] reloadData];
+                return;
+            }
+
+            NSDictionary *arr_newData =  @{ @"pName"    : app_name ,
+                                            @"pid"   : temp_appID ,
+                                            @"version" : [appDetailsOnServer objectForKey:[app_name localizedCapitalizedString]]  ,
                                             };
             // remove old data
-            [[dictionaryOf_userApplications  objectForKey:@"apps"] removeObjectAtIndex:i];
-            [[dictionaryOf_userApplications  objectForKey:@"apps"] insertObject:arr_newData atIndex:i];
-          break;
+            [[dictionaryOf_userApplications  objectForKey:@"product"] removeObjectAtIndex:i];
+            [[dictionaryOf_userApplications  objectForKey:@"product"] insertObject:arr_newData atIndex:i];
+            NSError * err;
+            NSData * jsonData = [NSJSONSerialization  dataWithJSONObject:dictionaryOf_userApplications options:0 error:&err];
+            NSString * myString = [[NSString alloc] initWithData:jsonData   encoding:NSUTF8StringEncoding];
+            NSLog(@"%@",myString);
+
+            [Read_WriteJSONFile writeStringWithData:myString fileName:@"AppsForUser"];
+
+            isDownload = false ;
+            [[self appDetail_TV] reloadData];
+            return;
         }
     }
-    NSError * err;
-    NSData * jsonData = [NSJSONSerialization  dataWithJSONObject:dictionaryOf_userApplications options:0 error:&err];
-    NSString * myString = [[NSString alloc] initWithData:jsonData   encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",myString);
 
-    [Read_WriteJSONFile writeStringWithData:myString fileName:@"AppsForUser"];
-    [[self appDetail_TV] reloadData];
 
 }
 
 
 -(void)finshWithError {
+    [AlertController showAlertWithSingleButton:@"Cancel" presentOnViewController:self
+                                    alertTitle:@"Info"
+                                  alertMessage:@"Error to Download Files ... "];
     [[self appDetail_TV] reloadData];
 }
 @end

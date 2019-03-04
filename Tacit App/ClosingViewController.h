@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BeforeDoctorView.h"
 
-@interface ClosingViewController : UIViewController
+@interface ClosingViewController : UIViewController<_BeforeDocView >
 
 @end

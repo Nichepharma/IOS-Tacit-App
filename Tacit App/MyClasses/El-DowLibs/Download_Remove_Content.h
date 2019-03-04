@@ -27,6 +27,7 @@
 
 
 @interface Download_Remove_Content : NSObject <SSZipArchiveDelegate , NSURLConnectionDelegate>
+
 -(void)_StartDownloadFromServer :(NSString *)fileName ;
 @property (nonatomic, weak)id<_DownloadContentDelegate> downloadDelegate ;
 +(BOOL)removeApplication:(NSString *)str_ApplicationNameWillRemove;

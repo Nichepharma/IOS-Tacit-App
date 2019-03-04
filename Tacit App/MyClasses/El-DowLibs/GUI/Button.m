@@ -19,24 +19,11 @@
     self = [super initWithFrame:CGRectMake(btnX, btnY, img.frame.size.width, img.frame.size.height) ];
     
     if (self) {
-//        if ([imageName isEqualToString:@"null"]) {
-//            
-//            self =[UIButton buttonWithType:UIButtonTypeCustom ];
-//            [self setFrame:CGRectMake(btnX, btnY, 100, 150)];
-//            
-//        }else{
-            self = [UIButton buttonWithType:UIButtonTypeCustom ];
+
             [self setFrame:CGRectMake(btnX, btnY, img.frame.size.width, img.frame.size.height)];
-            //   [self setTitle:@"selfomer" forState:UIControlStateNormal];
             [self setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             [self setImage:[UIImage imageNamed:imageName] forState:UIControlStateHighlighted];
-//        }
-
-           
-        
-        
-        
-       
+        [[self titleLabel]  setFont:[UIFont fontWithName:@"NeoSans-Light.otf" size:13]];
     }
     return self;
 }

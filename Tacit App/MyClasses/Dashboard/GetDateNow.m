@@ -26,9 +26,12 @@ static GetDateNow *sharedInstance = nil ;
 //    if (!curent_toDay) {
         NSDate *today = [NSDate date];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MM d,yyyy HH:mm:ss"];
         [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
         [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-        [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+        [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+//    [dateFormatter setDateFormat:@"MM d,yyyy HH:mm:ss"];
+
         NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
         [dateFormatter setLocale:usLocale];
         curent_toDay = [dateFormatter stringFromDate:today];

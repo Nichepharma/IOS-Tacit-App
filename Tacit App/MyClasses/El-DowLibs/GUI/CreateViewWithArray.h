@@ -8,8 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "Image.h"
+#import "SetAnimationsWithItems.h"
+#import "ApplicationData.h"
+#import "UIImageView+ImageViewCategory.h"
+#import "UILabel+LabelCategory.h"
+#import "PieDraw.h"
+#import <MediaPlayer/MediaPlayer.h>
+#import "AnimatedGif.h"
+#import "UIImageView+AnimatedGif.h"
 
-@interface CreateViewWithArray : UIView
+
+@interface CreateViewWithArray : UIView<AnimatedGifDelegate>
 
 /*! 
   * this method return view  , 

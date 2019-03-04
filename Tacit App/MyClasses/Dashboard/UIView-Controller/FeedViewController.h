@@ -10,4 +10,8 @@
 #import "Header.h"
 @interface FeedViewController : UIViewController <UITextFieldDelegate>
 @property (strong,nonatomic) NSString *strVisitTime , *strfeed_sample, *strfeed_remark, *strfeed_objection;
+@property BOOL _HomeViewStatus , _isPharmacy;
+@property(strong , nonatomic) NSString *strAPP_name ;
+@property(strong , nonatomic) NSString *feedback_sampleTypeSelected  ;
+
 @end

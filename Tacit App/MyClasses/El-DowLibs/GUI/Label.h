@@ -10,4 +10,6 @@
 
 @interface Label : UILabel
 - (id)initWithFrame:(CGRect)frame :(NSString *)Text :(int)size ;
+
+
 @end

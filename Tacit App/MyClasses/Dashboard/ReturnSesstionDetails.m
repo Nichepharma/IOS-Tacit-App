@@ -29,8 +29,8 @@ NSMutableDictionary *sessionDetails ;
 
 
 -(void)setData:(NSString *)str_sessionID{
-    NSLog(@"sesstion De %@",[[DBManager getSharedInstance] getOneSyncSesstion:str_sessionID] );
-    
+//    NSLog(@"sesstion De %@",[[DBManager getSharedInstance] getOneSyncSesstion:str_sessionID] );
+
     NSString *docString =[[[DBManager getSharedInstance] getOneSyncSesstion:str_sessionID] objectAtIndex:9];
     
     NSArray* doc_Array = [docString componentsSeparatedByString: @"|"];
@@ -42,14 +42,25 @@ NSMutableDictionary *sessionDetails ;
     
     NSString *_totalTime =[[[DBManager getSharedInstance] getOneSyncSesstion:str_sessionID] objectAtIndex:2];
     
-    
+    NSString *_visitType =[[[DBManager getSharedInstance] getOneSyncSesstion:str_sessionID] objectAtIndex:13];
+
     [sessionDetails removeAllObjects];
+
+    NSLog(@"_visitType %@ ", _visitType);
+
+
+    if ([_visitType isEqualToString:@"1"]) {
+        [sessionDetails setObject:@"Privarte Market" forKey:@"visit_type"];
+    }else if ([_visitType isEqualToString:@"2"]) {
+        [sessionDetails setObject:@"Hospitals" forKey:@"visit_type"];
+    }else if ([_visitType isEqualToString:@"3"]) {
+        [sessionDetails setObject:@"Pharmacies" forKey:@"visit_type"];
+    }
+
     [sessionDetails setObject:str_sessionID forKey:@"id"];
     [sessionDetails setObject:doc_Array forKey:@"docName"];
     [sessionDetails setObject:docSpecArray forKey:@"docSpec"];
     [sessionDetails setObject:_totalTime forKey:@"du"];
-    
-  
     
 }
 

@@ -21,9 +21,6 @@ static TimerCalculate *sharedInstance = nil;
 }
 
 
-
-
-
 NSDateFormatter *timeFormat ;
 
 -(void) init_fire :(int) _numOf_Slides{
@@ -37,15 +34,12 @@ NSDateFormatter *timeFormat ;
         [timeFormat setLocale:usLocale];
 
 
-        if (!self.arr_accu ) {
-            
-                self.arr_accu=[[NSMutableArray alloc] init];
+//        if (!self.arr_accu ) {
+        self.arr_accu=[[NSMutableArray alloc] init];
             for (int x=0; x<_numOf_Slides ; x++) {
-                  NSLog(@"_str_SessionID >>> %@",_str_SessionID);
                 NSString *str=@"0";
                 [self.arr_accu addObject:str ];
-
-            }
+//            }
         }
         
 
@@ -54,7 +48,14 @@ NSDateFormatter *timeFormat ;
 
 
 -(NSString *)TimeNow {
+    if (!timeFormat) {
+        _str_SessionID =[[NSString alloc]initWithString:[[GetDateNow getD] getSesstionID]];
+        timeFormat = [[NSDateFormatter alloc] init];
+        [timeFormat setDateFormat:@"HH:mm:ss"];
+        NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        [timeFormat setLocale:usLocale];
 
+    }
     NSString *theTime1 =[[NSString alloc] init];
     NSDate *now = [[NSDate alloc] init];
     theTime1  = [timeFormat stringFromDate:now];
@@ -72,13 +73,13 @@ NSDateFormatter *timeFormat ;
     NSTimeInterval secondsBetween = [date2 timeIntervalSinceDate:date1];
     
     double result = secondsBetween ;
-          NSLog(@"Time Interval %f ",result);
+//          NSLog(@"Time Interval %f ",result);
     double resultValue = result + [[self.arr_accu objectAtIndex:slideNumber] doubleValue];
     NSString *convert_result_ToStringValue =[[NSString alloc] initWithFormat:@"%f",resultValue];
     [self.arr_accu replaceObjectAtIndex:slideNumber withObject:convert_result_ToStringValue];
     
 //    
-        NSLog(@"%@ ",[self getAccTime]);
+//        NSLog(@"%@ ",[self getAccTime]);
   //     NSLog(@"%i ",slideNumber);
 }
 
